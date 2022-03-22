@@ -3,6 +3,8 @@ lockfileVersion: 5.3
 specifiers:
   '@vitejs/plugin-vue': ^2.2.4
   autoprefixer: ^10.4.4
+  axios: ^0.26.1
+  json-bigint-fix: ^1.0.3
   pinia: ^2.0.12
   postcss: ^8.4.12
   postcss-import: ^14.0.2
@@ -16,6 +18,8 @@ specifiers:
 
 dependencies:
   autoprefixer: 10.4.4_postcss@8.4.12
+  axios: 0.26.1
+  json-bigint-fix: 1.0.3
   pinia: 2.0.12_typescript@4.6.2+vue@3.2.31
   postcss: 8.4.12
   postcss-import: 14.0.2_postcss@8.4.12
@@ -328,12 +332,24 @@ packages:
       postcss-value-parser: 4.2.0
     dev: false
 
+  /axios/0.26.1:
+    resolution: {integrity: sha512-fPwcX4EvnSHuInCMItEhAGnaSEXRBjtzh9fOtsE6E1G6p7vl7edEeZe11QHf18+6+9gR5PbKV/sGKNaD8YaMeA==}
+    dependencies:
+      follow-redirects: 1.14.9
+    transitivePeerDependencies:
+      - debug
+    dev: false
+
   /babel-walk/3.0.0-canary-5:
     resolution: {integrity: sha512-GAwkz0AihzY5bkwIY5QDR+LvsRQgB/B+1foMPvi0FZPMl5fjD7ICiznUiBdLYMH1QYe6vqu4gWYytZOccLouFw==}
     engines: {node: '>= 10.0.0'}
     dependencies:
       '@babel/types': 7.17.0
     dev: true
+
+  /bignumber.js/9.0.2:
+    resolution: {integrity: sha512-GAcQvbpsM0pUb0zw1EI0KhQEZ+lRwR5fYaAp3vPOYuP7aDvGy6cVN6XHLauvF8SOga2y0dcLcjt3iQDTSEliyw==}
+    dev: false
 
   /binary-extensions/2.2.0:
     resolution: {integrity: sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==}
@@ -791,6 +807,16 @@ packages:
       to-regex-range: 5.0.1
     dev: false
 
+  /follow-redirects/1.14.9:
+    resolution: {integrity: sha512-MQDfihBQYMcyy5dhRDJUHcw7lb2Pv/TuE6xP1vyraLukNDHKbDxDNaOE3NbCAdKQApno+GPRyo1YAp89yCjK4w==}
+    engines: {node: '>=4.0'}
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+    dev: false
+
   /fraction.js/4.2.0:
     resolution: {integrity: sha512-MhLuK+2gUcnZe8ZHlaaINnQLl0xRIGRfcGk2yl8xoQAfHrSsL3rYu6FCmBdkdbhc9EPlwyGHewaRsvwRMJtAlA==}
     dev: false
@@ -930,6 +956,12 @@ packages:
 
   /js-tokens/4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
+    dev: false
+
+  /json-bigint-fix/1.0.3:
+    resolution: {integrity: sha512-TFqjZuxg7pMdD6mSY6UMvoESMwvOkwZ2LnitfWuu4tiNyD/sJl/AP9nZ6ZXDVrEkzE/LLhAqL8U71izKjzxdpA==}
+    dependencies:
+      bignumber.js: 9.0.2
     dev: false
 
   /json-parse-even-better-errors/2.3.1:

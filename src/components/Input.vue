@@ -22,7 +22,7 @@ const value = computed({
 <template>
   <input
     v-model="value"
-    class="form-input w-full my-1 border-b py-1 border-gray-500 outline-none transition focus:border-cyan-500 hover:border-cyan-500"
+    class="form-input w-full my-1 border-b py-1 border-gray-500 outline-none transition focus:border-primary-500 hover:border-primary-500"
   />
 </template>
 
