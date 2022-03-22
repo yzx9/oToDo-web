@@ -11,7 +11,6 @@
     "autoprefixer": "^10.4.4",
     "axios": "^0.26.1",
     "json-bigint-fix": "^1.0.3",
-    "pinia": "^2.0.12",
     "postcss": "^8.4.12",
     "postcss-import": "^14.0.2",
     "postcss-nesting": "^10.1.3",

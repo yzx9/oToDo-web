@@ -1,16 +1,14 @@
-import { useSessionStore } from "../store"
+import { hasSignIn, accessToken, updateAccessToken } from "../session"
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios"
 import _JsonBigInt from "json-bigint-fix"
 
 const JsonBigInt = _JsonBigInt({ useNativeBigInt: true })
 
 async function requestSuccess(config: AxiosRequestConfig<any>) {
-  if (config.headers) {
-    const { accessToken } = useSessionStore()
-    if (accessToken) {
-      config.headers["Authorization"] = `Bearer ${accessToken}`
-    }
+  if (config.headers && hasSignIn.value) {
+    config.headers["Authorization"] = `Bearer ${accessToken.value}`
   }
+
   return config
 }
 
@@ -53,12 +51,13 @@ async function responseFail(error: AxiosError) {
   throw error
 }
 
+const authorizationReg = /^[Bb]earer (\s+)$/
 async function responseSuccess(response: AxiosResponse<any, any>) {
   // Check response headers if contains new access token
-  if (response.headers?.authorization) {
-    const store = useSessionStore()
-    const jwtString = response.headers.authorization.split(" ")[1]
-    store.accessToken = jwtString
+  const authorization = response.headers["authorization"]
+  if (authorization && authorizationReg.test(authorization)) {
+    const token = authorization.match(authorizationReg)!
+    updateAccessToken(token[1])
   }
 
   return response
