@@ -31,22 +31,24 @@ export function createRouter(): Router {
     routes,
   })
 
-  router.beforeEach((to) => {
-    if (to.meta?.public || hasSignIn.value) return
+  if (import.meta.env.PROD) {
+    router.beforeEach((to) => {
+      if (to.meta?.public || hasSignIn.value) return
 
-    if (to.path === "/" && typeof to.query.code === "string") {
+      if (to.path === "/" && typeof to.query.code === "string") {
+        router.push({
+          path: "/signin",
+          query: { code: to.query.code, state: to.query.state },
+        })
+        return
+      }
+
       router.push({
         path: "/signin",
-        query: { code: to.query.code, state: to.query.state },
+        query: { from: to.fullPath },
       })
-      return
-    }
-
-    router.push({
-      path: "/signin",
-      query: { from: to.fullPath },
     })
-  })
+  }
 
   return router
 }

@@ -14,8 +14,8 @@ export async function getSession() {
   await get("/sessions")
 }
 
-export async function refreshSessionToken() {
-  const resopnse = await post("/sessions/current/tokens")
+export async function refreshSessionToken(refreshToken: string) {
+  const resopnse = await post("/sessions/current/tokens", { refreshToken })
   return resopnse.data as SessionTokens
 }
 

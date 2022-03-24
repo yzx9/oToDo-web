@@ -1,4 +1,5 @@
 const colors = require("tailwindcss/colors")
+const plugin = require("tailwindcss/plugin")
 
 delete colors.lightBlue
 delete colors.warmGray
@@ -18,5 +19,14 @@ module.exports = {
       info: colors.gray,
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(function ({ addComponents }) {
+      addComponents({
+        ".bg-theme": {
+          backdropFilter: "blur(10px)",
+          backgroundColor: `rgb(241 245 249 / 0.8)`,
+        },
+      })
+    }),
+  ],
 }
