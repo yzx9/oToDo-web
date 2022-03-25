@@ -23,7 +23,7 @@ module.exports = {
     plugin(function ({ addComponents }) {
       addComponents({
         ".bg-theme": {
-          backdropFilter: "blur(10px)",
+          backdropFilter: "blur(8px)",
           backgroundColor: `rgb(241 245 249 / 0.8)`,
         },
       })

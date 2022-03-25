@@ -1,51 +1,118 @@
 <script setup lang="ts">
 import { reactive } from "vue"
 import CheckBox from "./CheckBox.vue"
+import TodoListItem from "./TodoListItem.vue"
+
+const emit = defineEmits<{
+  (event: "clickTodo", id: bigint): void
+}>()
 
 const props = defineProps<{
-  todoListID: BigInt
+  todoListID: bigint
 }>()
+
+const newTodo = reactive({
+  id: -1n,
+  text: "",
+})
 
 const todoGroups = reactive([
   {
-    title: "先前",
+    title: "今天",
+    collasp: false,
     items: [
-      { id: 1n, text: "Todo1" },
-      { id: 2n, text: "Todo2" },
-      { id: 3n, text: "Todo3" },
-      { id: 4n, text: "Todo4" },
-      { id: 5n, text: "Todo5" },
+      { id: 1n, text: "Todo1", done: true },
+      { id: 2n, text: "Todo2", done: false },
+      { id: 3n, text: "Todo3", done: false },
+      { id: 4n, text: "Todo4", done: false },
+      { id: 5n, text: "Todo5", done: false },
+      { id: 6n, text: "Todo6", done: true },
+      { id: 7n, text: "Todo7", done: false },
+      { id: 8n, text: "Todo8", done: false },
+      { id: 9n, text: "Todo9", done: false },
+      { id: 10n, text: "Todo10", done: false },
+    ],
+  },
+  {
+    title: "先前",
+    collasp: false,
+    items: [
+      { id: 11n, text: "Todo11", done: true },
+      { id: 12n, text: "Todo12", done: false },
+      { id: 13n, text: "Todo13", done: false },
+      { id: 14n, text: "Todo14", done: false },
+      { id: 15n, text: "Todo15", done: false },
+      { id: 16n, text: "Todo16", done: false },
+      { id: 17n, text: "Todo17", done: false },
+      { id: 18n, text: "Todo18", done: false },
+      { id: 19n, text: "Todo19", done: false },
     ],
   },
 ])
+
+async function handleCreate() {
+  // TODO
+  newTodo.text = ""
+}
 </script>
 
 <template>
-  <div>
-    <h2>Todo List ID: {{ props.todoListID }}</h2>
+  <div class="flex flex-col">
+    <h2 class="p-8 text-2xl text-white font-bold select-none">
+      Todo List ID: {{ props.todoListID }}
+    </h2>
 
-    <div v-for="g in todoGroups">
-      <h3>{{ g.title }}</h3>
+    <div class="flex-1 overflow-y-auto">
+      <template v-for="g in todoGroups" :key="'todo-list-group-' + g.title">
+        <div class="px-8 pt-2 flex">
+          <header
+            class="px-2 py-1 rounded text-sm bg-zinc-500/80 backdrop-blur text-white cursor-pointer select-none"
+            @click="g.collasp = !g.collasp"
+          >
+            <h3>{{ g.title }}</h3>
+          </header>
+        </div>
 
-      <div
-        v-for="todo in g.items"
-        :key="'todo-list-' + todo.id"
-        class="todo-list__item flex justify-between items-center"
-      >
-        <CheckBox class="w-8" />
+        <template v-if="!g.collasp">
+          <TodoListItem
+            v-for="todo in g.items"
+            :key="'todo-list-' + todo.id"
+            @click="emit('clickTodo', todo.id)"
+          >
+            <template #prepend>
+              <CheckBox class="w-8" :checked="todo.done" />
+            </template>
 
-        <p class="flex-1">{{ todo.text }}</p>
+            <template #default>
+              <p>{{ todo.text }}</p>
+            </template>
 
-        <div></div>
-      </div>
+            <template #append>
+              <div class="cursor-pointer">Star</div>
+            </template>
+          </TodoListItem>
+        </template>
+      </template>
     </div>
 
-    <div class="todo-list__item fixed bottom-0 flex items-center">123123</div>
+    <div class="pb-5">
+      <TodoListItem>
+        <template #prepend>
+          <CheckBox class="w-8" :checked="false" />
+        </template>
+
+        <template #default>
+          <input
+            v-model="newTodo.text"
+            class="bg-transparent outline-none"
+            @keyup.enter="handleCreate"
+          />
+        </template>
+
+        <template #append>
+          <div>Star</div>
+        </template>
+      </TodoListItem>
+    </div>
   </div>
 </template>
-
-<style lang="postcss">
-.todo-list__item {
-  @apply h-12 my-2 mx-8 rounded px-4 bg-theme;
-}
-</style>

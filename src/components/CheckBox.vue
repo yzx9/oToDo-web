@@ -2,6 +2,10 @@
 const emit = defineEmits<{
   (event: "click"): void
 }>()
+
+const props = defineProps<{
+  checked: boolean
+}>()
 </script>
 
 <template>

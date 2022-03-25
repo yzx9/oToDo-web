@@ -6,8 +6,19 @@ import TodoList from "../components/TodoList.vue"
 import TodoListMenu from "../components/TodoListMenu.vue"
 import UserProfile from "../components/UserProfile.vue"
 
+const activeTodo = ref(0n)
 const activeTodoListID = ref(0n)
 const showTodo = ref(true)
+
+function handleTodoClicked(id: bigint) {
+  if (activeTodo.value != id) {
+    showTodo.value = true
+    activeTodo.value = id
+  } else {
+    showTodo.value = false
+    activeTodo.value = 0n
+  }
+}
 </script>
 
 <template>
@@ -20,12 +31,20 @@ const showTodo = ref(true)
       <TodoListMenu v-model="activeTodoListID" class="flex-1" />
     </nav>
 
-    <main class="flex-1" @click="showTodo = !showTodo">
-      <TodoList :todoListID="activeTodoListID" />
+    <main class="flex-1">
+      <TodoList
+        class="h-full"
+        :todoListID="activeTodoListID"
+        @clickTodo="handleTodoClicked"
+      />
     </main>
 
-    <aside v-if="showTodo" class="bg-theme w-96">
-      <TodoContent />
+    <aside v-if="showTodo" class="w-96 flex flex-col bg-theme">
+      <div class="m-4 mr-6 self-end cursor-pointer" @click="showTodo = false">
+        X
+      </div>
+
+      <TodoContent class="flex-1 overflow-y-auto" :todoID="activeTodo" />
     </aside>
   </div>
 </template>
