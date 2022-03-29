@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue"
 import SearchBar from "../components/SearchBar.vue"
-import TodoContent from "../components/TodoContent.vue"
+import Todo from "../components/Todo.vue"
 import TodoList from "../components/TodoList.vue"
 import TodoListMenu from "../components/TodoListMenu.vue"
 import UserProfile from "../components/UserProfile.vue"
@@ -40,11 +40,14 @@ function handleTodoClicked(id: bigint) {
     </main>
 
     <aside v-if="showTodo" class="w-96 flex flex-col bg-theme">
-      <div class="m-4 mr-6 self-end cursor-pointer" @click="showTodo = false">
+      <div
+        class="m-4 mb-2 mr-6 self-end cursor-pointer select-none text-2xl"
+        @click="showTodo = false"
+      >
         X
       </div>
 
-      <TodoContent class="flex-1 overflow-y-auto" :todoID="activeTodo" />
+      <Todo class="flex-1 overflow-y-auto" :todoID="activeTodo" />
     </aside>
   </div>
 </template>
