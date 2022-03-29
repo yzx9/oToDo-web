@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref } from "vue"
+import Menu from "../components/Menu.vue"
 import SearchBar from "../components/SearchBar.vue"
 import Todo from "../components/Todo.vue"
 import TodoList from "../components/TodoList.vue"
-import TodoListMenu from "../components/TodoListMenu.vue"
 import UserProfile from "../components/UserProfile.vue"
 
 const activeTodo = ref(0n)
@@ -28,7 +28,7 @@ function handleTodoClicked(id: bigint) {
 
       <SearchBar class="h-12" />
 
-      <TodoListMenu v-model="activeTodoListID" class="flex-1" />
+      <Menu v-model:activeId="activeTodoListID" class="flex-1" />
     </nav>
 
     <main class="flex-1">

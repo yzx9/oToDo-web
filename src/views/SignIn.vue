@@ -41,7 +41,7 @@ const SignInMethods3rdParty = [
 
 async function handleSignIn() {
   try {
-    await signIn(form.userName, form.password)
+    await signIn(form.userName, form.password, false)
     redirect()
   } catch (e) {
     // TODO[feat]: catch error here
@@ -76,7 +76,7 @@ onMounted(async () => {
 
   if (typeof code === "string" && typeof state === "string") {
     try {
-      await signInByGithubOAuth(code, state)
+      await signInByGithubOAuth(code, state, false)
 
       const to = sessionStorage.getItem(OAuthSessionKey) || "/"
       router.push(to)
