@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue"
 import type { MenuItem as MenuItemData } from "../types"
+import ArrowRight from "./icons/ArrowRight.vue"
 
 const emit = defineEmits<{
   (event: "click", id: bigint): void
@@ -46,10 +47,10 @@ function handleClick() {
 
         <div
           v-else
-          class="flex justify-center items-center transition"
+          class="flex justify-center items-center transition text-slate-500"
           :class="{ 'rotate-90': opening }"
         >
-          CLOSE
+          <ArrowRight width="1.5px" size="1rem" />
         </div>
       </div>
     </div>
