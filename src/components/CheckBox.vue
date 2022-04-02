@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import CheckTick from "./icons/CheckTick.vue"
 const emit = defineEmits<{
   (event: "click"): void
 }>()
@@ -14,7 +15,9 @@ const props = defineProps<{
       <div
         class="absolute w-full h-full border-2 border-gray-500 rounded-full cursor-pointer"
         @click="emit('click')"
-      ></div>
+      >
+        <CheckTick />
+      </div>
     </div>
   </div>
 </template>
