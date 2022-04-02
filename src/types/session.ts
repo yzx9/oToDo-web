@@ -12,6 +12,7 @@ export type RefreshTokenDTO = {
 export type LoginDTO = {
   userName: string
   password: string
+  refreshTokenExp?: number
 }
 
 /*

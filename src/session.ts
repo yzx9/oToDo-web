@@ -7,10 +7,12 @@ import {
   signInByGithubOAuth as _signInByGithubOAuth,
   signOut as _signOut,
 } from "./apis"
-import type { SessionTokens } from "./types"
+import type { LoginDTO, SessionTokens } from "./types"
 import { parseJWTExpiresAt } from "./utils"
+import { persistence as _persistence } from "./store"
 
 const REFRESH_TOKEN_KEY = "OTODO_REFRESH_TOKEN"
+const REFRESH_TOKEN_EXP = 15 * 24 * 60 * 60 // 15 day
 const REFRESH_INTERVAL_BEFORE = 28 * 1000 // 28s
 const REFRESH_INTERVAL_DEFAULT = 7.5 * 1000 // 7.5s
 
@@ -35,8 +37,12 @@ export async function signIn(
   password: string,
   persistence: boolean
 ) {
-  const tokens = await _signIn({ userName, password })
-  setTokens(tokens, persistence)
+  _persistence.value = persistence
+
+  const data: LoginDTO = { userName, password }
+  if (_persistence.value) data.refreshTokenExp = REFRESH_TOKEN_EXP
+  const tokens = await _signIn(data)
+  setTokens(tokens)
 }
 
 export async function signInByGithubOAuth(
@@ -44,20 +50,24 @@ export async function signInByGithubOAuth(
   state: string,
   persistence: boolean
 ) {
+  _persistence.value = persistence
+
   const tokens = await _signInByGithubOAuth(code, state)
-  setTokens(tokens, persistence)
+  setTokens(tokens)
 }
 
 export async function signInByLocal(): Promise<boolean> {
   try {
-    const refreshToken = localStorage.getItem(REFRESH_TOKEN_KEY)
+    const refreshToken =
+      sessionStorage.getItem(REFRESH_TOKEN_KEY) ||
+      localStorage.getItem(REFRESH_TOKEN_KEY)
     if (refreshToken === null) {
       return false
     }
     session.refreshToken = refreshToken
 
     const tokens = await refreshSessionToken(refreshToken)
-    setTokens(tokens, false)
+    setTokens(tokens)
     return true
   } catch (e) {
     return false
@@ -73,14 +83,14 @@ export async function signOut() {
   await _signOut()
 }
 
-function setTokens(tokens: SessionTokens, persistence?: boolean) {
+function setTokens(tokens: SessionTokens) {
   session.accessToken = tokens.accessToken
 
   if (tokens.refreshToken) {
     session.refreshToken = tokens.refreshToken
     sessionStorage.setItem(REFRESH_TOKEN_KEY, session.refreshToken)
 
-    if (persistence)
+    if (_persistence.value)
       localStorage.setItem(REFRESH_TOKEN_KEY, session.refreshToken)
   }
 

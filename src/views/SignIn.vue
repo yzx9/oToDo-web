@@ -41,7 +41,7 @@ const SignInMethods3rdParty = [
 
 async function handleSignIn() {
   try {
-    await signIn(form.userName, form.password, false)
+    await signIn(form.userName, form.password, true)
     redirect()
   } catch (e) {
     // TODO[feat]: catch error here
