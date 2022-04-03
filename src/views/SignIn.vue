@@ -21,7 +21,7 @@ const form = reactive({
 const SignInMethods3rdParty = [
   {
     name: "Github OAuth Login",
-    icon: "/3rdParty/GitHub-Mark/GitHub-Mark-64px.png",
+    icon: "/3rd-party/GitHub-Mark/GitHub-Mark-64px.png",
     async click() {
       try {
         const { redirectURI } = await getGithubOAuthRedirector()
