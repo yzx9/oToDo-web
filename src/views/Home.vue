@@ -5,6 +5,7 @@ import SearchBar from "../components/SearchBar.vue"
 import Todo from "../components/Todo.vue"
 import TodoList from "../components/TodoList.vue"
 import UserProfile from "../components/UserProfile.vue"
+import Cross from "../components/icons/Cross.vue"
 
 const activeTodo = ref(0n)
 const activeTodoListID = ref(0n)
@@ -44,7 +45,7 @@ function handleTodoClicked(id: bigint) {
         class="m-4 mb-2 mr-6 self-end cursor-pointer select-none text-2xl"
         @click="showTodo = false"
       >
-        X
+        <Cross size="20px" width="1.5px" />
       </div>
 
       <Todo class="flex-1 overflow-y-auto" :todoID="activeTodo" />
