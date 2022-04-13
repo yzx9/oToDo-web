@@ -2,14 +2,15 @@ import dayjs from "dayjs"
 import { computed, reactive, readonly, toRef } from "vue"
 import {
   getSession,
-  refreshSessionToken,
   signIn as _signIn,
   signInByGithubOAuth as _signInByGithubOAuth,
+  signInByRefreshToken as _signInByRefreshToken,
   signOut as _signOut,
 } from "./apis"
+import { storage } from "./services/storage"
+import { persistence as _persistence } from "./store"
 import type { LoginDTO, SessionTokens } from "./types"
 import { parseJWTExpiresAt } from "./utils"
-import { persistence as _persistence } from "./store"
 
 const REFRESH_TOKEN_KEY = "OTODO_REFRESH_TOKEN"
 const REFRESH_TOKEN_EXP = 15 * 24 * 60 * 60 // 15 day
@@ -56,17 +57,15 @@ export async function signInByGithubOAuth(
   setTokens(tokens)
 }
 
-export async function signInByLocal(): Promise<boolean> {
+export async function signInByRefreshToken(): Promise<boolean> {
   try {
-    const refreshToken =
-      sessionStorage.getItem(REFRESH_TOKEN_KEY) ||
-      localStorage.getItem(REFRESH_TOKEN_KEY)
+    const refreshToken = storage.getItem(REFRESH_TOKEN_KEY)
     if (refreshToken === null) {
       return false
     }
     session.refreshToken = refreshToken
 
-    const tokens = await refreshSessionToken(refreshToken)
+    const tokens = await _signInByRefreshToken(refreshToken)
     setTokens(tokens)
     return true
   } catch (e) {
@@ -77,8 +76,7 @@ export async function signInByLocal(): Promise<boolean> {
 export async function signOut() {
   session.accessToken = ""
   session.refreshToken = ""
-  sessionStorage.removeItem(REFRESH_TOKEN_KEY)
-  localStorage.removeItem(REFRESH_TOKEN_KEY)
+  storage.removeItem(REFRESH_TOKEN_KEY)
   stopTimer()
   await _signOut()
 }
@@ -86,13 +84,8 @@ export async function signOut() {
 function setTokens(tokens: SessionTokens) {
   session.accessToken = tokens.accessToken
 
-  if (tokens.refreshToken) {
-    session.refreshToken = tokens.refreshToken
-    sessionStorage.setItem(REFRESH_TOKEN_KEY, session.refreshToken)
-
-    if (_persistence.value)
-      localStorage.setItem(REFRESH_TOKEN_KEY, session.refreshToken)
-  }
+  session.refreshToken = tokens.refreshToken
+  storage.setItem(REFRESH_TOKEN_KEY, session.refreshToken)
 
   const expiresAt = parseJWTExpiresAt(tokens.accessToken)
   const interval = dayjs(expiresAt)

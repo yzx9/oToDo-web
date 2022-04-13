@@ -7,7 +7,7 @@ import ButtonLink from "../components/ButtonLink.vue"
 import Divider from "../components/Divider.vue"
 import Input from "../components/Input.vue"
 import Frame from "../components/ViewFrameForm.vue"
-import { signIn, signInByGithubOAuth, signInByLocal } from "../session"
+import { signIn, signInByGithubOAuth, signInByRefreshToken } from "../session"
 
 const route = useRoute()
 const router = useRouter()
@@ -79,6 +79,7 @@ onMounted(async () => {
       await signInByGithubOAuth(code, state, false)
 
       const to = sessionStorage.getItem(OAuthSessionKey) || "/"
+      sessionStorage.removeItem(OAuthSessionKey)
       router.push(to)
     } catch (e) {
       // TODO[feat]: catch error here
@@ -86,7 +87,7 @@ onMounted(async () => {
     }
   }
 
-  if (await signInByLocal()) {
+  if (await signInByRefreshToken()) {
     redirect()
   }
 })
